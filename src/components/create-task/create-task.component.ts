@@ -132,7 +132,7 @@ import { CreateTaskRequest } from '../../models/task.model';
   styles: [`
     .create-task-container {
       min-height: 100vh;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      background: black;
       position: relative;
       overflow: hidden;
     }

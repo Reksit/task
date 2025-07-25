@@ -186,7 +186,7 @@ import { User } from '../../models/user.model';
   styles: [`
     .dashboard-container {
       min-height: 100vh;
-      /*background: #000000;*/
+      background: #000000;
       position: relative;
       overflow: hidden;
     }
