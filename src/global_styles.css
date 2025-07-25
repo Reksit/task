@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+body.noscroll {
+  overflow: hidden !important;  /* Prevent scroll */
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   /*background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #f1f1f1 100%);*/
@@ -13,6 +17,7 @@ body {
   color: #fff;
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body::before {

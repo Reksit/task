@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -442,7 +442,7 @@ import { LoginRequest, RegisterRequest, VerifyEmailRequest } from '../../models/
     }
   `]
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit, OnDestroy {
   currentMode: 'login' | 'register' | 'verify' = 'login';
   showVerifyTab = false;
   isLoading = false;
@@ -473,6 +473,11 @@ export class AuthComponent {
     private authService: AuthService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    // Disable scroll when this component is shown
+    document.body.classList.add('noscroll');
+  }
 
   setMode(mode: 'login' | 'register' | 'verify'): void {
     this.currentMode = mode;
@@ -603,6 +608,7 @@ export class AuthComponent {
   }
 
   ngOnDestroy(): void {
+    document.body.classList.remove('noscroll');
     if (this.resendTimer) {
       clearInterval(this.resendTimer);
     }
