@@ -14,6 +14,7 @@ public class TaskResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long userId;
+    private boolean reminderSent;
 
     // Constructors
     public TaskResponse() {}
@@ -28,6 +29,7 @@ public class TaskResponse {
         this.createdAt = task.getCreatedAt();
         this.updatedAt = task.getUpdatedAt();
         this.userId = task.getUser().getId();
+        this.reminderSent = task.isReminderSent();
     }
 
     // Getters and Setters
@@ -101,5 +103,13 @@ public class TaskResponse {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
     }
 }

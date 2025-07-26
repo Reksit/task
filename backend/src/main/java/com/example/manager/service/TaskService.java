@@ -110,7 +110,18 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
         task.setStatus(Task.TaskStatus.PENDING);
+        // Reset reminder sent when task is marked as pending again
+        task.setReminderSent(false);
         Task updatedTask = taskRepository.save(task);
         return new TaskResponse(updatedTask);
+    }
+
+    public void markReminderSent(Long id) {
+        User user = getCurrentUser();
+        Task task = taskRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        
+        task.setReminderSent(true);
+        taskRepository.save(task);
     }
 }

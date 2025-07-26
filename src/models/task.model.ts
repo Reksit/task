@@ -8,6 +8,7 @@ export interface Task {
   createdAt?: Date;
   updatedAt?: Date;
   userId?: number;
+  reminderSent?: boolean;
 }
 
 export interface CreateTaskRequest {

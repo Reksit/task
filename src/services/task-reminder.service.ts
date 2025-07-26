@@ -12,6 +12,7 @@ import { Observable, interval, switchMap, filter } from 'rxjs';
 export class TaskReminderService {
   private apiUrl = 'http://localhost:8080/api/tasks';
   private reminderInterval = 60000; // Check every minute
+  private sentReminders = new Set<number>(); // Track tasks that already had reminders sent
 
   constructor(
     private http: HttpClient,
@@ -46,7 +47,7 @@ export class TaskReminderService {
     const oneDayFromNow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
     tasks.forEach(task => {
-      if (task.dueDate) {
+      if (task.dueDate && task.id && !task.reminderSent) {
         const dueDate = new Date(task.dueDate);
         
         // Check if task is due within 24 hours

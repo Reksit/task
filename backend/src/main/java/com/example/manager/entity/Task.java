@@ -45,6 +45,9 @@ public class Task {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "reminder_sent", nullable = false)
+    private boolean reminderSent = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -130,6 +133,14 @@ public class Task {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
     }
 
     // Enums

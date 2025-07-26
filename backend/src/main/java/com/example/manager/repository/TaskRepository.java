@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByUserOrderByCreatedAtDesc(User user);
     List<Task> findByUserAndStatusOrderByCreatedAtDesc(User user, Task.TaskStatus status);
+    List<Task> findByUserAndStatusAndReminderSentOrderByCreatedAtDesc(User user, Task.TaskStatus status, boolean reminderSent);
     Optional<Task> findByIdAndUser(Long id, User user);
     long countByUserAndStatus(User user, Task.TaskStatus status);
 }
