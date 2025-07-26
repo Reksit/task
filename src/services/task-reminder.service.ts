@@ -52,30 +52,60 @@ export class TaskReminderService {
         
         // Check if task is due within 24 hours
         if (dueDate <= oneDayFromNow && dueDate > now) {
-          const hoursUntilDue = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60));
+          const millisecondsUntilDue = dueDate.getTime() - now.getTime();
+          const hoursUntilDue = Math.max(1, Math.ceil(millisecondsUntilDue / (1000 * 60 * 60)));
+          const minutesUntilDue = Math.ceil(millisecondsUntilDue / (1000 * 60));
           
           // Show popup notification
           this.notificationService.addNotification({
             title: 'Task Due Soon!',
-            message: `"${task.title}" is due in ${hoursUntilDue} hour(s)`,
+            message: this.formatRemainingTime(millisecondsUntilDue, task.title),
             type: 'warning',
             taskId: task.id
           });
 
           // Send email reminder
-          this.sendEmailReminder(task, hoursUntilDue);
+          this.sendEmailReminder(task, millisecondsUntilDue);
         }
       }
     });
   }
 
-  private sendEmailReminder(task: Task, hoursUntilDue: number): void {
+  private formatRemainingTime(millisecondsUntilDue: number, taskTitle: string): string {
+    const hoursUntilDue = Math.floor(millisecondsUntilDue / (1000 * 60 * 60));
+    const minutesUntilDue = Math.floor((millisecondsUntilDue % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (hoursUntilDue > 0) {
+      if (minutesUntilDue > 0) {
+        return `"${taskTitle}" is due in ${hoursUntilDue} hour(s) and ${minutesUntilDue} minute(s)`;
+      } else {
+        return `"${taskTitle}" is due in ${hoursUntilDue} hour(s)`;
+      }
+    } else {
+      return `"${taskTitle}" is due in ${minutesUntilDue} minute(s)`;
+    }
+  }
+  private sendEmailReminder(task: Task, millisecondsUntilDue: number): void {
+    const hoursUntilDue = Math.floor(millisecondsUntilDue / (1000 * 60 * 60));
+    const minutesUntilDue = Math.floor((millisecondsUntilDue % (1000 * 60 * 60)) / (1000 * 60));
+    
+    let timeRemaining: string;
+    if (hoursUntilDue > 0) {
+      if (minutesUntilDue > 0) {
+        timeRemaining = `${hoursUntilDue} hour(s) and ${minutesUntilDue} minute(s)`;
+      } else {
+        timeRemaining = `${hoursUntilDue} hour(s)`;
+      }
+    } else {
+      timeRemaining = `${minutesUntilDue} minute(s)`;
+    }
+
     const reminderData = {
       taskId: task.id,
       taskTitle: task.title,
       taskDescription: task.description,
       dueDate: task.dueDate,
-      hoursUntilDue: hoursUntilDue
+      timeRemaining: timeRemaining
     };
 
     this.http.post(`${this.apiUrl}/send-reminder`, reminderData, this.getHttpOptions())

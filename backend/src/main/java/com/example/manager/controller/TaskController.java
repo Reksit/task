@@ -104,12 +104,12 @@ public class TaskController {
             String taskTitle = reminderData.get("taskTitle").toString();
             String taskDescription = reminderData.get("taskDescription").toString();
             String dueDate = reminderData.get("dueDate").toString();
-            Integer hoursUntilDue = Integer.valueOf(reminderData.get("hoursUntilDue").toString());
+            String timeRemaining = reminderData.get("timeRemaining").toString();
             
             // Mark task as reminder sent
             taskService.markReminderSent(taskId);
             
-            emailService.sendTaskReminder(taskTitle, taskDescription, dueDate, hoursUntilDue);
+            emailService.sendTaskReminder(taskTitle, taskDescription, dueDate, timeRemaining);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

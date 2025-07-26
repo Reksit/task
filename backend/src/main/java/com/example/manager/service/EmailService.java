@@ -73,7 +73,7 @@ public class EmailService {
         );
     }
 
-    public void sendTaskReminder(String taskTitle, String taskDescription, String dueDate, Integer hoursUntilDue) {
+    public void sendTaskReminder(String taskTitle, String taskDescription, String dueDate, String timeRemaining) {
         // Get current user email
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(userEmail).orElse(null);
@@ -88,7 +88,7 @@ public class EmailService {
             System.out.println("=== TASK REMINDER - EMAIL NOT CONFIGURED ===");
             System.out.println("To: " + userEmail);
             System.out.println("Task: " + taskTitle);
-            System.out.println("Due in: " + hoursUntilDue + " hours");
+            System.out.println("Due in: " + timeRemaining);
             System.out.println("==========================================");
             return;
         }
@@ -97,7 +97,7 @@ public class EmailService {
             message.setFrom(fromEmail);
             message.setTo(userEmail);
             message.setSubject("⏰ Task Reminder - " + taskTitle);
-            message.setText(buildTaskReminderEmailBody(user.getUsername(), taskTitle, taskDescription, dueDate, hoursUntilDue));
+            message.setText(buildTaskReminderEmailBody(user.getUsername(), taskTitle, taskDescription, dueDate, timeRemaining));
             
             mailSender.send(message);
             System.out.println("Task reminder email sent successfully to: " + userEmail);
@@ -107,7 +107,7 @@ public class EmailService {
         }
     }
 
-    private String buildTaskReminderEmailBody(String username, String taskTitle, String taskDescription, String dueDate, Integer hoursUntilDue) {
+    private String buildTaskReminderEmailBody(String username, String taskTitle, String taskDescription, String dueDate, String timeRemaining) {
         return String.format(
             "⏰ Task Reminder - TaskManager Pro\n\n" +
             "Hello %s,\n\n" +
@@ -116,14 +116,14 @@ public class EmailService {
             "Title: %s\n" +
             "Description: %s\n" +
             "Due Date: %s\n" +
-            "⏰ Time Remaining: %d hour(s)\n\n" +
+            "⏰ Time Remaining: %s\n\n" +
             "🚨 Don't forget to complete this task before the deadline!\n\n" +
             "You can manage your tasks by logging into TaskManager Pro.\n\n" +
             "Stay productive! 💪\n\n" +
             "Best regards,\n" +
             "The TaskManager Pro Team\n" +
             "taskmanagerai@gmail.com",
-            username, taskTitle, taskDescription, dueDate, hoursUntilDue
+            username, taskTitle, taskDescription, dueDate, timeRemaining
         );
     }
 }
