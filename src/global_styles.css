@@ -7,7 +7,8 @@
 }
 
 body.noscroll {
-  overflow: hidden !important;  /* Prevent scroll */
+  overflow-y: hidden !important;  /* Prevent vertical scroll */
+  overflow-x: hidden !important;  /* Prevent horizontal scroll */
 }
 
 body {
@@ -16,8 +17,8 @@ body {
   min-height: 100vh;
   color: #fff;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
 }
 
 body::before {

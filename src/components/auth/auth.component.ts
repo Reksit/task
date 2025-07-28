@@ -222,6 +222,7 @@ import { LoginRequest, RegisterRequest, VerifyEmailRequest } from '../../models/
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
       position: relative;
       overflow: hidden;
+      overflow-y: auto;
     }
 
     .auth-container::before {
@@ -247,6 +248,7 @@ import { LoginRequest, RegisterRequest, VerifyEmailRequest } from '../../models/
       max-width: 450px;
       position: relative;
       z-index: 10;
+      margin: auto;
     }
 
     .auth-card {
@@ -255,6 +257,8 @@ import { LoginRequest, RegisterRequest, VerifyEmailRequest } from '../../models/
       background: rgba(30, 30, 45, 0.95);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      max-height: none;
+      overflow-y: visible;
     }
 
     .auth-header {
@@ -306,6 +310,8 @@ import { LoginRequest, RegisterRequest, VerifyEmailRequest } from '../../models/
       background: linear-gradient(135deg, rgba(100, 255, 218, 0.1) 0%, rgba(0, 188, 212, 0.1) 100%);
       border-radius: 25px;
       border: 2px solid rgba(100, 255, 218, 0.2);
+      max-width: 100%;
+      word-wrap: break-word;
     }
 
     .verification-icon {
@@ -440,6 +446,46 @@ import { LoginRequest, RegisterRequest, VerifyEmailRequest } from '../../models/
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Responsive adjustments for verification mode */
+    @media (max-height: 800px) {
+      .auth-container {
+        align-items: flex-start;
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
+      
+      .verification-info {
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+      
+      .verification-info h3 {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+      
+      .verification-info p {
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .auth-container {
+        padding: 15px;
+        align-items: flex-start;
+        padding-top: 30px;
+      }
+      
+      .auth-card {
+        padding: 25px;
+      }
+      
+      .verification-info {
+        padding: 15px;
+      }
+    }
   `]
 })
 export class AuthComponent implements OnInit, OnDestroy {
@@ -483,6 +529,13 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.currentMode = mode;
     this.errorMessage = '';
     this.resetForms();
+    
+    // Remove noscroll class when switching to verify mode to allow scrolling
+    if (mode === 'verify') {
+      document.body.classList.remove('noscroll');
+    } else {
+      document.body.classList.add('noscroll');
+    }
   }
 
   resetForms(): void {
